@@ -58,9 +58,11 @@ export class RawDataService {
     async getRawData({ startDate, endDate, enodebId, cellId }) {
         const query: any = {};
 
-        query.resultTime = {};
-        if (startDate) query.resultTime.$gte = startDate;
-        if (endDate) query.resultTime.$lte = endDate;
+        if (startDate || endDate) {
+            query.resultTime = {};
+            if (startDate) query.resultTime.$gte = startDate;
+            if (endDate) query.resultTime.$lte = endDate;
+        }
         if (enodebId) query.enodebId = enodebId;
         if (cellId) query.cellId = cellId;
 
@@ -87,7 +89,6 @@ export class RawDataService {
 function parseLine(line) {
   const startIdx = line.indexOf("=");
   if (startIdx === -1) return {};
-  const tail = line.slice(line.indexOf(" ", line.indexOf("=")) - 50) || line;
   return Object.fromEntries(
     line
       .split(',')
